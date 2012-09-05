@@ -20,7 +20,7 @@ public class HorizontalSlidingPane extends Group {
     private int currentSection = 1;
     // Скорость пиксель/секунда после которой считаем, что пользователь хочет перейти к следующей секции
     private float flingSpeed   = 1000;
-
+    // Допустимое смещение за крайние секции (левую или правую)
     private float overscrollDistance = 500;
 
     private Actor touchFocusedChild;
@@ -38,6 +38,7 @@ public class HorizontalSlidingPane extends Group {
             // "простое" движение пальцем по экрану
             public boolean pan (int x, int y, int deltaX, int deltaY) {
 
+                // Проверям не зашли ли мы за: (крайние секции) (+-) (допустимое смещение)
                 if ( amountX < -overscrollDistance ) return false;
                 if ( amountX > (sections.getActors().size() - 1) * sectionWidth + overscrollDistance) return false;
 
@@ -85,8 +86,10 @@ public class HorizontalSlidingPane extends Group {
 
     // Добавление секции с порцией уровней в наш контейнер
     public void addWidget(Actor widget) {
+        // Позиция секции по X = количество секций * длинну секции (выстраиваем их в ряд)
         widget.x = this.sections.getActors().size() * sectionWidth;
         widget.y = 0;
+        // Устанавливаем размеры секции в размер экрана
         widget.width  = sectionWidth;
         widget.height = sectionHeight;
 
